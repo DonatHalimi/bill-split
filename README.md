@@ -1,8 +1,52 @@
-# React + Vite
+## Bill Splitting App - React Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Table of Contents**
 
-Currently, two official plugins are available:
+* [Features](#features)
+* [Technologies Used](#technologies-used)
+* [Running the App](#running-the-app)
+* [Using the App](#using-the-app)
+* [Additional Notes](#additional-notes)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+* Enter the total bill amount.
+* Add or remove people splitting the bill.
+* Assign a name to each person.
+* Adjust the percentage each person pays using a slider.
+* See the calculated amount each person owes based on the total bill and percentage.
+
+## Technologies Used
+
+* [**React**](https://react.dev/)
+* [**Material-UI**](https://mui.com/)
+
+## Running the App
+
+1. Clone this repository.
+2. Install the dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+This will open the app in your browser at http://localhost:3000 by default.
+
+## Using the App
+
+1. Enter the total bill amount in the text field.
+2. Click "Add Person" to add a new person.
+3. Enter a name for the person in the text field.
+4. Use the slider to adjust the percentage that person pays.
+5. You can see the calculated amount each person owes based on the total and percentage.
+
+## Additional Notes
+
+* The app uses localStorage to persist the total bill amount, people data, and dark mode preference across sessions.
+* The app uses Material-UI components for a clean and responsive design.
