@@ -1,5 +1,8 @@
 ## Bill Splitting App - React Project
 
+### Live Demo
+You can check out the live demo of the Bill Splitting App [here](https://bill-split-bay.vercel.app).
+
 **Table of Contents**
 
 * [Features](#features)
