@@ -120,6 +120,8 @@ const BillSplitting = () => {
     setTotalBill(Number(e.target.value));
   };
 
+  const isSinglePerson = people.length === 1;
+
   return (
     <Box
       sx={{
@@ -246,6 +248,7 @@ const BillSplitting = () => {
                     <IconButton
                       onClick={() => removePerson(person.id)}
                       size="small"
+                      disabled={isSinglePerson}
                     >
                       <PersonRemove />
                     </IconButton>
@@ -254,7 +257,7 @@ const BillSplitting = () => {
                 <Slider
                   value={person.percentage}
                   onChange={(_, newValue) =>
-                    handlePercentageChange(person.id, newValue)
+                    !isSinglePerson && handlePercentageChange(person.id, newValue)
                   }
                   aria-labelledby="input-slider"
                   sx={{
@@ -275,43 +278,52 @@ const BillSplitting = () => {
                       color: darkMode ? '#777' : '#ccc',
                     },
                   }}
+                  disabled={isSinglePerson}
                 />
 
                 <Grid container justifyContent="space-between" alignItems="flex-end">
                   <Grid item xs={6}>
-                    <TextField
-                      value={
-                        Number.isInteger(person.percentage)
+                    {isSinglePerson ? (
+                      <Typography variant="body2" sx={{ color: darkMode ? 'white' : 'black' }}>
+                        {Number.isInteger(person.percentage)
                           ? person.percentage
-                          : person.percentage.toFixed(2)
-                      }
-                      onChange={(e) =>
-                        handlePercentageChange(person.id, parseFloat(e.target.value))
-                      }
-                      type="number"
-                      inputProps={{ min: 0, max: 100, step: 0.01 }}
-                      variant="outlined"
-                      size="small"
-                      InputProps={{
-                        sx: { color: darkMode ? 'white' : 'black' },
-                      }}
-                      sx={{
-                        bgcolor: darkMode ? '#282A2C' : 'white',
-                        width: Number.isInteger(person.percentage) ? '70px' : '90px',
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            borderColor: darkMode ? '#555' : '#ccc',
+                          : person.percentage.toFixed(2)}%
+                      </Typography>
+                    ) : (
+                      <TextField
+                        value={
+                          Number.isInteger(person.percentage)
+                            ? person.percentage
+                            : person.percentage.toFixed(2)
+                        }
+                        onChange={(e) =>
+                          handlePercentageChange(person.id, parseFloat(e.target.value))
+                        }
+                        type="number"
+                        inputProps={{ min: 0, max: 100, step: 0.01 }}
+                        variant="outlined"
+                        size="small"
+                        InputProps={{
+                          sx: { color: darkMode ? 'white' : 'black' },
+                        }}
+                        sx={{
+                          bgcolor: darkMode ? '#282A2C' : 'white',
+                          width: Number.isInteger(person.percentage) ? '70px' : '90px',
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: darkMode ? '#555' : '#ccc',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: darkMode ? '#bbb' : '#888',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: darkMode ? '#aaa' : 'primary.main',
+                            },
                           },
-                          '&:hover fieldset': {
-                            borderColor: darkMode ? '#bbb' : '#888',
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: darkMode ? '#aaa' : 'primary.main',
-                          },
-                        },
-                      }}
-                    />
-                    <span className='relative top-2 ml-2 '>%</span>
+                        }}
+                      />
+                    )}
+                    {!isSinglePerson && <span className='relative top-2 ml-2 '>%</span>}
                   </Grid>
                   <Grid item xs={6} sx={{ textAlign: 'right' }}>
                     <Typography
@@ -377,7 +389,7 @@ const BillSplitting = () => {
           </Box>
         </Paper>
       </Container>
-    </Box>
+    </Box >
   );
 };
 
