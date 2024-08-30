@@ -50,10 +50,6 @@ const BillSplitting = () => {
     localStorage.setItem('people', JSON.stringify(people));
   }, [people]);
 
-  useEffect(() => {
-    document.body.style.backgroundColor = darkMode ? '#282A2C' : '#ffffff';
-  }, [darkMode]);
-
   const addPerson = () => {
     const newPerson = {
       id: people.length + 1,
@@ -80,6 +76,10 @@ const BillSplitting = () => {
   };
 
   const handlePercentageChange = (id, newPercentage) => {
+    if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 100) {
+      return;
+    }
+
     let updatedPeople = people.map((person) =>
       person.id === id ? { ...person, percentage: newPercentage } : person
     );
@@ -94,7 +94,8 @@ const BillSplitting = () => {
     if (adjustment !== 0) {
       updatedPeople = updatedPeople.map((person) => {
         if (person.id !== id) {
-          const newPersonPercentage = person.percentage - (adjustment / (people.length - 1));
+          const newPersonPercentage =
+            person.percentage - adjustment / (people.length - 1);
           return {
             ...person,
             percentage: Math.max(newPersonPercentage, 0),
@@ -260,29 +261,68 @@ const BillSplitting = () => {
                     color: darkMode ? '#1E1F20' : 'primary.main',
                     '& .MuiSlider-thumb': {
                       color: darkMode ? '#fff' : 'primary.main',
+                      '&:hover, &.Mui-focusVisible': {
+                        boxShadow: darkMode ? '0 0 0 8px rgba(255, 255, 255, 0.16)' : '0 0 0 8px rgba(25, 118, 210, 0.16)',
+                      },
+                      '&.Mui-active': {
+                        boxShadow: darkMode ? '0 0 0 14px rgba(255, 255, 255, 0.16)' : '0 0 0 14px rgba(25, 118, 210, 0.16)',
+                      },
                     },
                     '& .MuiSlider-track': {
                       bgcolor: darkMode ? '#aaa' : 'primary.main',
                     },
+                    '& .MuiSlider-rail': {
+                      color: darkMode ? '#777' : '#ccc',
+                    },
                   }}
                 />
-                <Grid container justifyContent="space-between">
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: darkMode ? 'white' : 'black',
-                    }}
-                  >
-                    {person.percentage.toFixed(2)}%
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: darkMode ? 'white' : 'black',
-                    }}
-                  >
-                    ${((totalBill * person.percentage) / 100).toFixed(2)}
-                  </Typography>
+
+                <Grid container justifyContent="space-between" alignItems="flex-end">
+                  <Grid item xs={6}>
+                    <TextField
+                      value={
+                        Number.isInteger(person.percentage)
+                          ? person.percentage
+                          : person.percentage.toFixed(2)
+                      }
+                      onChange={(e) =>
+                        handlePercentageChange(person.id, parseFloat(e.target.value))
+                      }
+                      type="number"
+                      inputProps={{ min: 0, max: 100, step: 0.01 }}
+                      variant="outlined"
+                      size="small"
+                      InputProps={{
+                        sx: { color: darkMode ? 'white' : 'black' },
+                      }}
+                      sx={{
+                        bgcolor: darkMode ? '#282A2C' : 'white',
+                        width: Number.isInteger(person.percentage) ? '70px' : '90px',
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            borderColor: darkMode ? '#555' : '#ccc',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: darkMode ? '#bbb' : '#888',
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: darkMode ? '#aaa' : 'primary.main',
+                          },
+                        },
+                      }}
+                    />
+                    <span className='relative top-2 ml-2 '>%</span>
+                  </Grid>
+                  <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: darkMode ? 'white' : 'black',
+                      }}
+                    >
+                      ${((totalBill * person.percentage) / 100).toFixed(2)}
+                    </Typography>
+                  </Grid>
                 </Grid>
               </Paper>
             ))}
