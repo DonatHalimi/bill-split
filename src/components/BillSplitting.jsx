@@ -291,16 +291,12 @@ const BillSplitting = () => {
                       </Typography>
                     ) : (
                       <TextField
-                        value={
-                          Number.isInteger(person.percentage)
-                            ? person.percentage
-                            : person.percentage.toFixed(2)
-                        }
+                        value={Math.round(person.percentage)}
                         onChange={(e) =>
-                          handlePercentageChange(person.id, parseFloat(e.target.value))
+                          handlePercentageChange(person.id, parseInt(e.target.value, 10))
                         }
                         type="number"
-                        inputProps={{ min: 0, max: 100, step: 0.01 }}
+                        inputProps={{ min: 0, max: 100, step: 1 }}
                         variant="outlined"
                         size="small"
                         InputProps={{
@@ -308,7 +304,7 @@ const BillSplitting = () => {
                         }}
                         sx={{
                           bgcolor: darkMode ? '#282A2C' : 'white',
-                          width: Number.isInteger(person.percentage) ? '70px' : '90px',
+                          width: '70px',
                           '& .MuiOutlinedInput-root': {
                             '& fieldset': {
                               borderColor: darkMode ? '#555' : '#ccc',
@@ -322,6 +318,7 @@ const BillSplitting = () => {
                           },
                         }}
                       />
+
                     )}
                     {!isSinglePerson && <span className='relative top-2 ml-2 '>%</span>}
                   </Grid>
